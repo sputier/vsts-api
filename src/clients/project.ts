@@ -4,7 +4,7 @@ import { VstsRestExecutor, VstsRestRequest, HttpMethod } from "../vstsRestExecut
 import { Sequence } from "./common";
 
 export interface Project {
-    id: number;
+    id: string;
     url: string;
     name: string;
     description: string;

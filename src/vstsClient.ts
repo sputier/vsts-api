@@ -3,6 +3,7 @@
 import { VstsRestExecutor, VstsRestlerRestExecutor } from "./vstsRestExecutor";
 import { ProjectClient } from "./clients/project";
 import { TeamClient } from "./clients/team";
+import { GitClient } from "./clients/git";
 
 export class VstsConfiguration {
     private _url: string;
@@ -33,12 +34,14 @@ export class VstsClient {
 
     private _projectClient: ProjectClient;
     private _teamClient: TeamClient;
+    private _gitClient: GitClient;
 
     constructor(restExecutor: VstsRestExecutor) {
         this.restExecutor = restExecutor;
 
         this._projectClient = new ProjectClient(this.restExecutor);
         this._teamClient = new TeamClient(this.restExecutor);
+        this._gitClient = new GitClient(this.restExecutor);
     }
 
     public static createFromConfiguration(configuration: VstsConfiguration): VstsClient {
@@ -56,5 +59,9 @@ export class VstsClient {
 
     public get team() {
         return this._teamClient;
+    }
+    
+    public get git() {
+        return this._gitClient;
     }
 }

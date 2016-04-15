@@ -10,6 +10,7 @@ export interface GitRepository {
     url: string;
     project: Project;
     remoteUrl: string;
+    defaultBranch : string;
 }
 
 export interface GitCommitListOptions {
@@ -27,7 +28,7 @@ export interface GitCommit {
     author : {
         name : string,
         email : string,
-        date : Date
+       date : Date
     },
     committer : {
         name : string,
@@ -36,16 +37,16 @@ export interface GitCommit {
     },
     comment : string,
     changeCounts : {
-        edit : number,
-        add : number,
-        delete : number
+        Edit : number,
+        Add : number,
+        Delete : number
     },
     url : string,
     remoteUrl : string
 }
 
 export interface GitCommitDetail {
-    parents : GitCommit[],
+    parents : string[],
     treeId : string,
     push : {
         pushId : number,
@@ -120,7 +121,7 @@ export class GitClient {
         if (!projectNameOrId) {
             uri = `/_apis/git/repositories/${nameOrId}`;
         } else {
-            uri = `/${projectNameOrId}/_apis/git/repositories/${name}`;
+            uri = `/${projectNameOrId}/_apis/git/repositories/${nameOrId}`;
         }
         
         let request = new VstsRestRequest(uri, HttpMethod.GET, "1.0");
@@ -132,7 +133,7 @@ export class GitClient {
     public getCommits(repositoryId: string, options : GitCommitListOptions) : Promise<GitCommit[]>;
     
     public getCommits(repositoryId : string, options? : GitCommitListOptions) : Promise<GitCommit[]> {
-        let request = new VstsRestRequest(`/_apis/git/repositories/${repositoryId}`, HttpMethod.GET, "1.0");
+        let request = new VstsRestRequest(`/_apis/git/repositories/${repositoryId}/commits`, HttpMethod.GET, "1.0");
 
         if (options) {
             if (options.itemPath) { 
@@ -170,6 +171,7 @@ export class GitClient {
 
         return this.restExecutor.execute<GitCommitDetail>(request);
     }
+    
     
     
 }
